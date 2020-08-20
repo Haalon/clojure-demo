@@ -25,18 +25,18 @@
 
 
 (defn mock-insurance [] 
-    (clojure.string/join (map str (take 16 (repeatedly #(rand-int 9))))))
+    (clojure.string/join (map str (take 16 (repeatedly #(rand-int 10))))))
 
 (defn mock-name []
     (apply str (take (+ 4 (rand-int 10)) (repeatedly #(char (+ (rand-int 26) 65))))))
 
 (defn mock-gender []
-    (if (= 0 (rand-int 1)) "M" "F"))
+    (if (= 0 (rand-int 2)) "M" "F"))
 
 (defn mock-birth []
-    (let [y (str (+ 1920 (rand-int 100)))
-          m (format "%02d" (+ 1 (rand-int 11)))
-          d (format "%02d" (+ 1 (rand-int 27)))]
+    (let [y (str (+ 1920 (rand-int 101)))
+          m (format "%02d" (+ 1 (rand-int 12)))
+          d (format "%02d" (+ 1 (rand-int 28)))]
          (clojure.string/join \- [y m d])
     ))
 
