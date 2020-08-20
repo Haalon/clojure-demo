@@ -12,13 +12,14 @@
 (defn migrate []
   (when (not (migrated?))
     (print "Creating database structure...") (flush)
+    (sql/db-do-commands crud/url "CREATE TYPE sex AS ENUM ('male', 'female', 'not applicable');")
     (sql/db-do-commands crud/url
                         (sql/create-table-ddl
                          :crud
                          [[:id :serial "PRIMARY KEY"]
                          [:name "varchar(255)" "NOT NULL"]
                          [:insurance "char(16)" "NOT NULL UNIQUE"]
-                         [:gender "char(1)" "NOT NULL"]
+                         [:sex :sex "NOT NULL"]
                          [:birth :date "NOT NULL"]
                          [:address "varchar(255)" "NOT NULL"]]))
     (println " done")))
@@ -30,22 +31,22 @@
 (defn mock-name []
     (apply str (take (+ 4 (rand-int 10)) (repeatedly #(char (+ (rand-int 26) 65))))))
 
-(defn mock-gender []
-    (if (= 0 (rand-int 2)) "M" "F"))
+(defn mock-sex []
+    (util/cast-enum "sex" (if (= 0 (rand-int 2)) "male" "female")))
 
 (defn mock-birth []
     (let [y (str (+ 1920 (rand-int 101)))
           m (format "%02d" (+ 1 (rand-int 12)))
           d (format "%02d" (+ 1 (rand-int 28)))]
-         (clojure.string/join \- [y m d])
+         (util/parse-sql-date (clojure.string/join \- [y m d]))
     ))
 
 
 (defn populate [len] 
     (sql/insert! crud/url :crud {:name (mock-name),
                                   :insurance (mock-insurance),
-                                  :gender (mock-gender)
-                                  :birth (util/parse-sql-date (mock-birth))
+                                  :sex (mock-sex)
+                                  :birth (mock-birth)
                                   :address (mock-name),
                                   })
     (if (> len 0) (populate (- len 1)) nil))
