@@ -1,6 +1,6 @@
-(ns clojure-demo.core
+(ns demo_clj.core
    (:require [ring.adapter.jetty :as ring]
-   			 [clojure-demo.models.crud :as model]))
+   			 [demo_clj.models.crud :as model]))
 
 (defn handler [request]
   {:status 200

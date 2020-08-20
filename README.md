@@ -1,4 +1,4 @@
-# clojure-demo
+# demo_clj
 
 FIXME: description
 
@@ -10,7 +10,7 @@ Download from http://example.com/FIXME.
 
 FIXME: explanation
 
-    $ java -jar clojure-demo-0.1.0-standalone.jar [args]
+    $ java -jar demo_clj-0.1.0-standalone.jar [args]
 
 ## Options
 

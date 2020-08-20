@@ -1,4 +1,4 @@
-(ns clojure-demo.models.crud
+(ns demo_clj.models.crud
   (:require [clojure.java.jdbc :as sql]))
 
 (def url "postgresql://localhost:5432/crud")
