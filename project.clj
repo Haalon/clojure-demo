@@ -1,4 +1,4 @@
-(defproject demo_clj "0.1.0-SNAPSHOT"
+(defproject crud "0.1.0-SNAPSHOT"
   :description "FIXME: write description"
   :url "http://example.com/FIXME"
   :license {:name "EPL-2.0 OR GPL-2.0-or-later WITH Classpath-exception-2.0"
@@ -12,7 +12,7 @@
                  [hiccup "1.0.5"]
                  [com.stuartsierra/component "1.0.0"]
                  [org.clojure/clojurescript "1.10.773"]]
-  :main ^:skip-aot demo_clj.core
+  :main ^:skip-aot crud.core
   :target-path "target/%s"
   :profiles {:uberjar {:aot :all
 					   :jvm-opts ["-Dclojure.compiler.direct-linking=true"]}
@@ -23,7 +23,7 @@
                                     :figwheel true
                                     :compiler {:output-to "resources/public/app.js"
                                                :output-dir "resources/public/out"
-                                               :main "demo_clj.client"
+                                               :main "crud.client"
                                                :asset-path "/out"
                                                :optimizations :none
                                                :recompile-dependents true

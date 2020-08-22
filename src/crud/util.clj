@@ -1,4 +1,4 @@
-(ns demo_clj.models.util
+(ns crud.util
   (:import org.postgresql.util.PGobject)
   (:require [clojure.java.jdbc :as sql]))
 

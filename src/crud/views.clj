@@ -1,4 +1,4 @@
-(ns demo_clj.views.layout
+(ns crud.views
   (:require [hiccup.page :as h]))
 
 (defn common [title & body]

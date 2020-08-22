@@ -1,10 +1,19 @@
-(ns demo_clj.models.migration
+(ns crud.model
   (:require [clojure.java.jdbc :as sql]
-            [demo_clj.models.util :as util]
-            [demo_clj.models.crud :as crud]))
+            [crud.util :as util]))
+
+(def url "postgresql://localhost:5432/crud")
+
+(defn get-all []
+	(into [] (sql/query url ["select * from crud"])))
+
+; person should be a map
+(defn add [person]
+  (sql/insert! url :crud person)) 
+
 
 (defn migrated? []
-  (-> (sql/query crud/url
+  (-> (sql/query url
                  [(str "select count(*) from information_schema.tables "
                        "where table_name='crud'")])
       first :count pos?))
@@ -12,8 +21,8 @@
 (defn migrate []
   (when (not (migrated?))
     (print "Creating database structure...") (flush)
-    (sql/db-do-commands crud/url "CREATE TYPE sex AS ENUM ('male', 'female', 'not applicable');")
-    (sql/db-do-commands crud/url
+    (sql/db-do-commands url "CREATE TYPE sex AS ENUM ('male', 'female', 'not applicable');")
+    (sql/db-do-commands url
                         (sql/create-table-ddl
                          :crud
                          [[:id :serial "PRIMARY KEY"]
@@ -43,7 +52,7 @@
 
 
 (defn populate [len] 
-    (sql/insert! crud/url :crud {:name (mock-name),
+    (sql/insert! url :crud {:name (mock-name),
                                   :insurance (mock-insurance),
                                   :sex (mock-sex)
                                   :birth (mock-birth)
