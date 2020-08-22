@@ -9,7 +9,8 @@
     [:meta {:name "viewport" :content
             "width=device-width, initial-scale=1, maximum-scale=1"}]
     [:title title]
-    (h/include-css "base.css")]
+    (h/include-css "base.css")
+    (h/include-js "app.js")]
    [:body
     [:div {:id "header"}
      [:h1 {:class "container"} title]]

@@ -10,11 +10,21 @@
                  [ring/ring-jetty-adapter "1.8.1"]
                  [compojure "1.6.2"]
                  [hiccup "1.0.5"]
-                 [com.stuartsierra/component "1.0.0"]]
+                 [com.stuartsierra/component "1.0.0"]
+                 [org.clojure/clojurescript "1.10.773"]]
   :main ^:skip-aot demo_clj.core
   :target-path "target/%s"
   :profiles {:uberjar {:aot :all
 					   :jvm-opts ["-Dclojure.compiler.direct-linking=true"]}
-					   :dev {:plugins []
+					   :dev {:plugins [[lein-cljsbuild "1.1.8"]]
 					   	     :dependencies [[reloaded.repl "0.2.4"]]
-					   	     :source-paths ["dev"]}})
+					   	     :source-paths ["dev"]
+              :cljsbuild {:builds [{:source-paths ["src" "dev"]
+                                    :figwheel true
+                                    :compiler {:output-to "resources/public/app.js"
+                                               :output-dir "resources/public/out"
+                                               :main "demo_clj.client"
+                                               :asset-path "/out"
+                                               :optimizations :none
+                                               :recompile-dependents true
+                                               :source-map true}}]}}})
