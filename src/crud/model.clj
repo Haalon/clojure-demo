@@ -4,12 +4,29 @@
 
 (def url "postgresql://localhost:5432/crud")
 
-(defn get-all []
-	(into [] (sql/query url ["select * from crud"])))
+(defn list []
+ (sql/query url ["select * from crud order by id"]))
 
-; person should be a map
 (defn add [person]
-  (sql/insert! url :crud person)) 
+  (sql/insert! url :crud person))
+
+(defn delete [id]
+  (sql/delete! url :crud ["id = ?" id]))
+
+(defn update [id person]
+  (sql/update! url :crud person ["id = ?" id]))
+
+
+(defn value-reader-sql [key value]
+  (cond 
+    (= key :birth) (util/format-sql-date value)
+    :else value))
+
+(defn value-reader-json [key value]
+  (cond 
+    (= key :birth) (util/parse-sql-date value)
+    (= key :sex) (util/cast-enum "sex" value)
+    :else value))
 
 
 (defn migrated? []
@@ -26,11 +43,11 @@
                         (sql/create-table-ddl
                          :crud
                          [[:id :serial "PRIMARY KEY"]
-                         [:name "varchar(255)" "NOT NULL"]
-                         [:insurance "char(16)" "NOT NULL UNIQUE"]
-                         [:sex :sex "NOT NULL"]
-                         [:birth :date "NOT NULL"]
-                         [:address "varchar(255)" "NOT NULL"]]))
+                          [:name "varchar(255)" "NOT NULL"]
+                          [:insurance "char(16)" "NOT NULL UNIQUE"]
+                          [:sex :sex "NOT NULL"]
+                          [:birth :date "NOT NULL"]
+                          [:address "varchar(255)" "NOT NULL"]]))
     (println " done")))
 
 
@@ -49,7 +66,6 @@
           d (format "%02d" (+ 1 (rand-int 28)))]
          (util/parse-sql-date (clojure.string/join \- [y m d]))
     ))
-
 
 (defn populate [len] 
     (sql/insert! url :crud {:name (mock-name),
