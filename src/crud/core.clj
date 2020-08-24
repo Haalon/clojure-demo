@@ -8,7 +8,6 @@
             [crud.util :as util]
             [clojure.data.json :as json]))
 
-
 (defn index [request]
   {:status 200
    :headers {"Content-Type" "text/html"}
@@ -17,8 +16,8 @@
 (defn api-list [request]
   {:status 200
    :headers {"Content-Type" "application/json"}
-   :body (json/write-str (model/list) 
-          :value-fn model/value-reader-sql)})
+   :body (json/write-str (model/list)
+                         :value-fn model/value-reader-sql)})
 
 (defn api-add [request]
   (let [entry (-> request

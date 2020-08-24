@@ -16,10 +16,9 @@
      [:h1 {:class "container"} title]]
     [:div {:id "content" :class "container"} body]]))
 
-
 (defn line [elems header?]
   (h/html5 [:tr
-    (for [e elems] [(if header? :th :td) e])]))
+            (for [e elems] [(if header? :th :td) e])]))
 
 (defn table [arrmap]
   (when arrmap

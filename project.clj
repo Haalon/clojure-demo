@@ -17,7 +17,8 @@
   :target-path "target/%s"
   :profiles {:uberjar {:aot :all
 					   :jvm-opts ["-Dclojure.compiler.direct-linking=true"]}
-					   :dev {:plugins [[lein-cljsbuild "1.1.8"]]
+					   :dev {:plugins [[lein-cljsbuild "1.1.8"]
+					                   [lein-cljfmt "0.6.8"]]
 					   	     :dependencies [[reloaded.repl "0.2.4"]]
 					   	     :source-paths ["dev"]
               :cljsbuild {:builds [{:source-paths ["src" "dev"]
