@@ -45,9 +45,9 @@
 (defroutes app
   (GET "/" [] index)
   (GET "/api" [] api-list)
-  (DELETE "/api/:id" [id] (api-delete id))
+  (DELETE "/api/:id" [id] (-> id Integer/parseInt api-delete))
   (POST "/api" req (api-add req))
-  (PUT "/api/:id" [id :as req] (api-update req id))
+  (PUT "/api/:id" [id :as req] (->> id Integer/parseInt (api-update req)))
   (resources "/"))
 
 (defrecord Demo []
