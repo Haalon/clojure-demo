@@ -12,7 +12,8 @@
                  [hiccup "1.0.5"]
                  [com.stuartsierra/component "1.0.0"]
                  [org.clojure/clojurescript "1.10.773"]
-                 [org.clojure/data.json "1.0.0"]]
+                 [org.clojure/data.json "1.0.0"]
+                 [cljs-http "0.1.46"]]
   :main ^:skip-aot crud.core
   :target-path "target/%s"
   :profiles {:uberjar {:aot :all
