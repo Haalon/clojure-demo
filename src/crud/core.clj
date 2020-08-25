@@ -1,4 +1,5 @@
 (ns crud.core
+  (:import org.postgresql.util.PSQLException)
   (:require [ring.adapter.jetty :as ring]
             [com.stuartsierra.component :as component]
             [compojure.core :refer [defroutes GET DELETE POST PUT]]
@@ -13,42 +14,38 @@
    :headers {"Content-Type" "text/html"}
    :body (views/common "CRUD" (views/table (model/list)))})
 
-(defn api-list [request]
-  {:status 200
+(defn build-response [body status]
+  {:status status
    :headers {"Content-Type" "application/json"}
-   :body (json/write-str (model/list)
-                         :value-fn model/value-reader-sql)})
+   :body body})
 
-(defn api-add [request]
-  (let [entry (-> request
-                  :body
-                  slurp
-                  (json/read-str :key-fn keyword :value-fn model/value-reader-json))]
-    {:status 200
-     :headers {"Content-Type" "application/json"}
-     :body (json/write-str (model/add entry)
-                           :value-fn model/value-reader-sql)}))
+(defn read-body [request]
+  (-> request
+      :body
+      slurp
+      (json/read-str :key-fn keyword 
+                     :value-fn model/value-reader-json)))
 
-(defn api-update [request id]
-  (let [entry (-> request
-                  :body
-                  slurp
-                  (json/read-str :key-fn keyword :value-fn model/value-reader-json))
-        id (Integer/parseInt id)]
-    {:status 200
-     :headers {"Content-Type" "application/json"}
-     :body (model/update id entry)}))
+(defn response [method & args]
+  (try
+    (let [res (apply method args)]
+      (-> res
+          (json/write-str :value-fn model/value-reader-sql)
+          (build-response 200)))
+    (catch PSQLException e (-> e
+                               .getMessage
+                               json/write-str
+                               (build-response 400)))))
 
-(defn api-del [id]
-  (let [id (Integer/parseInt id)]
-    {:status 200
-     :headers {"Content-Type" "application/json"}
-     :body (model/delete id)}))
+(defn api-list [_] (response model/list))
+(defn api-add [req] (response model/add (read-body req)))
+(defn api-update [req id] (response model/update id (read-body req)))
+(defn api-delete [id] (response model/delete id))
 
 (defroutes app
   (GET "/" [] index)
   (GET "/api" [] api-list)
-  (DELETE "/api/:id" [id] (api-del id))
+  (DELETE "/api/:id" [id] (api-delete id))
   (POST "/api" req (api-add req))
   (PUT "/api/:id" [id :as req] (api-update req id))
   (resources "/"))
