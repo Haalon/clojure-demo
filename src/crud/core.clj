@@ -26,7 +26,8 @@
                   (json/read-str :key-fn keyword :value-fn model/value-reader-json))]
     {:status 200
      :headers {"Content-Type" "application/json"}
-     :body (model/add entry)}))
+     :body (json/write-str (model/add entry)
+                           :value-fn model/value-reader-sql)}))
 
 (defn api-update [request id]
   (let [entry (-> request
