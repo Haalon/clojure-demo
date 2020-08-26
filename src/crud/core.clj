@@ -1,6 +1,7 @@
 (ns crud.core
   (:import org.postgresql.util.PSQLException)
   (:require [ring.adapter.jetty :as ring]
+            [ring.util.response :as resp]
             [com.stuartsierra.component :as component]
             [compojure.core :refer [defroutes GET DELETE POST PUT]]
             [compojure.route :refer [resources]]
@@ -43,7 +44,10 @@
 (defn api-delete [id] (response model/delete id))
 
 (defroutes app
-  (GET "/" [] index)
+  ; (GET "/" [] index)
+  (GET "/" [] (-> "index.html"
+                  (resp/resource-response {:root "public"})
+                  (resp/content-type "text/html")))
   (GET "/api" [] api-list)
   (DELETE "/api/:id" [id] (-> id Integer/parseInt api-delete))
   (POST "/api" req (api-add req))

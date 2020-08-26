@@ -17,14 +17,14 @@
     [:div {:id "content" :class "container"} body]]))
 
 (defn line [elems header?]
-  (h/html5 [:tr
-            (for [e elems] [(if header? :th :td) e])]))
+  [:tr
+    (for [e elems] [(if header? :th :td) e])])
 
 (defn table [arrmap]
   (when arrmap
     (let [fields (->> arrmap first keys (map name))
           values (map vals arrmap)]
-      (h/html5 [:table
-                (line fields true)
-                (for [l values] (line l false))]))))
+      [:table
+        (line fields true)
+        (for [l values] (line l false))])))
 
