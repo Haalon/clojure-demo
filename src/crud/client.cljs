@@ -26,7 +26,7 @@
   ^{:key (:id mmap)} 
   [:tr
     (for [k (keys mmap)] 
-      ^{:key (str (:id mmap) "_" (name k))}
+      ^{:key (name k)}
       [(if header? :th :td) (get mmap k)])])
 
 (defn table [arrmap]
