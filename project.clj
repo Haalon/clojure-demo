@@ -13,7 +13,8 @@
                  [com.stuartsierra/component "1.0.0"]
                  [org.clojure/clojurescript "1.10.773"]
                  [org.clojure/data.json "1.0.0"]
-                 [cljs-http "0.1.46"]]
+                 [cljs-http "0.1.46"]
+                 [reagent "0.10.0"]]
   :main ^:skip-aot crud.core
   :target-path "target/%s"
   :profiles {:uberjar {:aot :all

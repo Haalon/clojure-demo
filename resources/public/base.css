@@ -6,7 +6,7 @@ td {
     border: 1px solid black;
 }
 
-#content, #header {
+#app, #header {
     display: flex;
     justify-content: center;
 }
