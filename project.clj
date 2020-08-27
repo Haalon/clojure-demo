@@ -9,7 +9,6 @@
                  [ring/ring-core "1.8.1"]
                  [ring/ring-jetty-adapter "1.8.1"]
                  [compojure "1.6.2"]
-                 [hiccup "1.0.5"]
                  [com.stuartsierra/component "1.0.0"]
                  [org.clojure/clojurescript "1.10.773"]
                  [org.clojure/data.json "1.0.0"]
