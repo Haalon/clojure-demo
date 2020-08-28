@@ -8,7 +8,7 @@
   (sql/query url ["select * from crud order by id"]))
 
 (defn add [person]
-    (sql/insert! url :crud person))
+  (sql/insert! url :crud person))
 
 (defn delete [id]
   (sql/delete! url :crud ["id = ?" id]))

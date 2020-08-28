@@ -1,5 +1,6 @@
 (ns crud.web
   (:import org.postgresql.util.PSQLException)
+  (:import java.sql.BatchUpdateException)
   (:require [ring.util.response :as resp]
             [compojure.core :refer [defroutes GET DELETE POST PUT]]
             [compojure.route :refer [resources]]
@@ -13,22 +14,25 @@
    :body body})
 
 (defn read-body [request]
+  (prn (:remote-addr request) \newline)
   (-> request
       :body
       slurp
-      (json/read-str :key-fn keyword 
+      (json/read-str :key-fn keyword
                      :value-fn model/value-reader-json)))
 
 (defn response [method & args]
+  (print "\n\nrequest with\n" method \newline args)
+  (flush)
   (try
     (let [res (apply method args)]
       (-> res
           (json/write-str :value-fn model/value-reader-sql)
           (build-response 200)))
-    (catch PSQLException e (-> e
-                               .getMessage
-                               json/write-str
-                               (build-response 400)))))
+    (catch Exception e (-> e
+                           .getMessage
+                           json/write-str
+                           (build-response 400)))))
 
 (defn api-list [_] (response model/list))
 (defn api-add [req] (response model/add (read-body req)))
