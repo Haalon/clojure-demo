@@ -47,6 +47,19 @@
                  (reset! popup true))}
    "edit"])
 
+(defn refresh-btn [entry]
+  [:button
+   {:on-click #(fetch-data)}
+   "refresh"])
+
+
+(defn add-btn []
+  [:button
+   {:on-click #(do
+                 (reset! selected-entry nil)
+                 (reset! popup true))}
+   "add"])
+
 (defn line [mmap header?]
   ^{:key (:id mmap)}
   [:tr
@@ -88,14 +101,14 @@
   (reset! selected-entry nil))
 
 (defn form [entry]
-  (prn entry)
+  (prn entry (-> entry boolean not))
   [:form.floating.container {:on-submit send-data}
     ; [:h1 "fuck css"]
    [:div.row
     [:label {:for "name"} "Name surname"]
     [:input#name {:name "name"
                   :default-value (:name entry "")
-                  :required (boolean entry)}]]
+                  :required (-> entry boolean not)}]]
    [:div.row
     [:label {:for "insurance"} "Insurance ID"]
     [:input#insurance {:name "insurance"
@@ -103,12 +116,12 @@
                        :max-length "16"
                        :placeholder "0000000000000000"
                        :default-value (:insurance entry "")
-                       :required (boolean entry)
+                       :required (-> entry boolean not)
                        :title "16 number insurance ID"}]]
    [:div.row
     [:label {:for "sex"} "Sex"]
     [:select#sex {:name "sex"
-                  :required (boolean entry)
+                  :required (-> entry boolean not)
                   :default-value (:sex entry "male")}
      (for [sex sexes] [:option {:default-value sex
                                 :key sex}
@@ -118,12 +131,12 @@
     [:input#birth {:type "date"
                    :name "birth"
                    :default-value (:birth entry "2000-01-01")
-                   :required (boolean entry)}]]
+                   :required (-> entry boolean not)}]]
    [:div.row
     [:label {:for "address"} "Address"]
     [:input#address {:name "address"
                      :default-value (:address entry "")
-                     :required (boolean entry)}]]
+                     :required (-> entry boolean not)}]]
    [:div.row
     [:input
      {:type "submit"
@@ -138,9 +151,12 @@
 
 (defn app []
   [:div.container
-   (if @data
-     (table @data)
-     [:h2 "Loading..."])
+    [:div.row.container
+      (add-btn)
+      (refresh-btn)]
+    (if @data
+      (table @data)
+      [:h2 "Loading..."])
    (when @popup (form @selected-entry))])
 
 (defn ^:export main []
