@@ -1,4 +1,4 @@
-(ns crud.client
+(ns crud.client.core
   (:require-macros [cljs.core.async.macros :refer [go]])
   (:require [reagent.core :as r]
             [reagent.dom :as rdom]
@@ -51,7 +51,6 @@
   [:button
    {:on-click #(fetch-data)}
    "refresh"])
-
 
 (defn add-btn []
   [:button
@@ -141,9 +140,6 @@
     [:input
      {:type "submit"
       :default-value "submit"}]
-      ; [:button
-      ;   {:on-click send-data} 
-      ;   "submit"]
     [:button
      {:on-click reset-form
       :type "reset"}
@@ -151,12 +147,12 @@
 
 (defn app []
   [:div.container
-    [:div.row.container
-      (add-btn)
-      (refresh-btn)]
-    (if @data
-      (table @data)
-      [:h2 "Loading..."])
+   [:div.row.container
+    (add-btn)
+    (refresh-btn)]
+   (if @data
+     (table @data)
+     [:h2 "Loading..."])
    (when @popup (form @selected-entry))])
 
 (defn ^:export main []

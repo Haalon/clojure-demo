@@ -1,6 +1,6 @@
-(ns crud.model
+(ns crud.server.model
   (:require [clojure.java.jdbc :as sql]
-            [crud.util :as util]))
+            [crud.server.util :as util]))
 
 (def url "postgresql://localhost:5432/crud")
 

@@ -1,6 +1,6 @@
 (ns crud.core-test
   (:require [clojure.test :refer :all]
-            [crud.core :refer :all]))
+            [crud.server.core :refer :all]))
 
 (deftest a-test
   (testing "FIXME, I fail."

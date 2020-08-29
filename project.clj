@@ -14,7 +14,7 @@
                  [org.clojure/data.json "1.0.0"]
                  [cljs-http "0.1.46"]
                  [reagent "0.10.0"]]
-  :main ^:skip-aot crud.core
+  :main ^:skip-aot crud.server.core
   :target-path "target/%s"
   :profiles {:uberjar {:aot :all
 					   :jvm-opts ["-Dclojure.compiler.direct-linking=true"]}
@@ -26,7 +26,7 @@
                                     :figwheel true
                                     :compiler {:output-to "resources/public/app.js"
                                                :output-dir "resources/public/out"
-                                               :main "crud.client"
+                                               :main "crud.client.core"
                                                :asset-path "/out"
                                                :optimizations :none
                                                :recompile-dependents true

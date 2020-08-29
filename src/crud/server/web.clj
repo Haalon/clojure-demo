@@ -1,11 +1,11 @@
-(ns crud.web
+(ns crud.server.web
   (:import org.postgresql.util.PSQLException)
   (:import java.sql.BatchUpdateException)
   (:require [ring.util.response :as resp]
             [compojure.core :refer [defroutes GET DELETE POST PUT]]
             [compojure.route :refer [resources]]
-            [crud.model :as model]
-            [crud.util :as util]
+            [crud.server.model :as model]
+            [crud.server.util :as util]
             [clojure.data.json :as json]))
 
 (defn build-response [body status]

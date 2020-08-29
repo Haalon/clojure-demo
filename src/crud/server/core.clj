@@ -1,5 +1,5 @@
-(ns crud.core
-  (:require [crud.web :refer [app]]
+(ns crud.server.core
+  (:require [crud.server.web :refer [app]]
             [ring.adapter.jetty :as ring]
             [com.stuartsierra.component :as component]))
 
