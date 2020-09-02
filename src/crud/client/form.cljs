@@ -32,7 +32,7 @@
 
 (defn insurance-input [entry]
   [:div.row
-   [:label {:for "insurance"} "insurance id"]
+   [:label {:for "insurance"} "Insurance id"]
    [:input#insurance {:name "insurance"
                       :pattern "[0-9]{16}"
                       :max-length "16"
@@ -43,7 +43,7 @@
 
 (defn sex-input [entry]
   [:div.row
-   [:label {:for "sex"} "sex"]
+   [:label {:for "sex"} "Sex"]
    [:select#sex {:name "sex"
                  :required (-> entry boolean not)
                  :default-value (:sex entry "male")}
@@ -68,7 +68,7 @@
 
 (defn form [entry]
   (prn entry (-> entry boolean not))
-  [:form.floating.container {:on-submit send-data}
+  [:form#form.floating.container {:on-submit send-data}
    (name-input entry)
    (insurance-input entry)
    (sex-input entry)

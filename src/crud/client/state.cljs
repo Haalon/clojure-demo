@@ -10,8 +10,12 @@
 (defn fetch-data []
   (take! (api/list) #(reset! data %)))
 
-(defn set-form [entry flag]
-  (reset! selected-entry entry)
-  (reset! popup? flag))
+(defn reset-form []
+  (reset! selected-entry nil)
+  (reset! popup? nil))
 
-(defn reset-form [] (set-form nil nil))
+(defn set-form [entry flag]
+ (when @popup? ; reset the form inputs to default
+   (-> "form" js/document.getElementById .reset))
+	(reset! selected-entry entry)
+	(reset! popup? flag))
