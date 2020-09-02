@@ -1,6 +1,4 @@
 (ns crud.server.web
-  (:import org.postgresql.util.PSQLException)
-  (:import java.sql.BatchUpdateException)
   (:require [ring.util.response :as resp]
             [compojure.core :refer [defroutes GET DELETE POST PUT]]
             [compojure.route :refer [resources]]
@@ -14,7 +12,6 @@
    :body body})
 
 (defn read-body [request]
-  (prn (:remote-addr request) \newline)
   (-> request
       :body
       slurp
@@ -22,8 +19,6 @@
                      :value-fn model/value-reader-json)))
 
 (defn response [method & args]
-  (print "\n\nrequest with\n" method \newline args)
-  (flush)
   (try
     (let [res (apply method args)]
       (-> res
@@ -31,6 +26,8 @@
           (build-response 200)))
     (catch Exception e (-> e
                            .getMessage
+                           (#(re-matches #"(?s).*Detail:(.*?)\..*" %))
+                           (#(get % 1 (% 0))) ; get a detail sentence or the full message
                            json/write-str
                            (build-response 400)))))
 
@@ -40,7 +37,6 @@
 (defn api-delete [id] (response model/delete id))
 
 (defroutes app
-  ; (GET "/" [] index)
   (GET "/" [] (-> "index.html"
                   (resp/resource-response {:root "public"})
                   (resp/content-type "text/html")))
