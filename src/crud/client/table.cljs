@@ -17,7 +17,7 @@
    {:on-click #(state/set-form entry true)}
    "edit"])
 
-(defn refresh-btn [entry]
+(defn refresh-btn []
   [:button
    {:on-click #(state/fetch-data)}
    "refresh"])
@@ -40,13 +40,6 @@
       (del-btn (:id mmap))
       (edit-btn mmap)])])
 
-(defn table [arrmap]
-  [:div.container
-   [:div.row.container
-    (add-btn)
-    (refresh-btn)]
-   (table-body arrmap)])
-
 (defn table-body [arrmap]
   (when arrmap
     (let [fields (->> arrmap first keys (map name))
@@ -54,3 +47,10 @@
       [:table
        [:thead (line fieldmap true)]
        [:tbody (for [m arrmap]  (line m false))]])))
+
+(defn table [arrmap]
+  [:div.container
+   [:div.row.container
+    (add-btn)
+    (refresh-btn)]
+   (table-body arrmap)])
