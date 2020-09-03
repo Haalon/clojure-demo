@@ -3,18 +3,19 @@
             [crud.server.util :as util]))
 
 (def url "postgresql://localhost:5432/crud")
+(def db-name db-name) ; may be changed for testing?
 
 (defn list []
   (sql/query url ["select * from crud order by id"]))
 
 (defn add [person]
-  (sql/insert! url :crud person))
+  (sql/insert! url db-name person))
 
 (defn delete [id]
-  (sql/delete! url :crud ["id = ?" id]))
+  (sql/delete! url db-name ["id = ?" id]))
 
 (defn update [id person]
-  (sql/update! url :crud person ["id = ?" id]))
+  (sql/update! url db-name person ["id = ?" id]))
 
 (defn value-reader-sql [key value]
   (cond
@@ -39,7 +40,7 @@
     (sql/db-do-commands url "CREATE TYPE sex AS ENUM ('male', 'female', 'not applicable');")
     (sql/db-do-commands url
                         (sql/create-table-ddl
-                         :crud
+                         db-name
                          [[:id :serial "PRIMARY KEY"]
                           [:name "varchar(255)" "NOT NULL"]
                           [:insurance "char(16)" "NOT NULL UNIQUE"]

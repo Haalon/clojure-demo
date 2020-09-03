@@ -45,5 +45,3 @@
   (POST "/api" req (api-add req))
   (PUT "/api/:id" [id :as req] (->> id Integer/parseInt (api-update req)))
   (resources "/"))
-
-
