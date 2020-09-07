@@ -3,10 +3,12 @@
             [crud.server.util :as util]))
 
 (def url "postgresql://localhost:5432/crud")
-(def db-name :crud) ; may be changed for testing?
+(def db-name "crud") ; may be changed for testing?
 
 (defn list []
-  (sql/query url ["select * from crud order by id"]))
+  (sql/query url [(str "select * from "
+                       db-name
+                       " order by id")]))
 
 (defn add [person]
   (sql/insert! url db-name person))
@@ -28,18 +30,23 @@
     (= key :sex) (util/cast-enum "sex" value)
     :else value))
 
+(defn type-created? []
+  (-> (sql/query url "select count(*) from pg_type where typname ='sex'")
+      first :count pos?))
+
 (defn migrated? []
   (-> (sql/query url
                  [(str "select count(*) from information_schema.tables "
                        "where table_name='"
-                       (name db-name)
+                       db-name
                        "'")])
       first :count pos?))
 
 (defn migrate []
+  (when (not (type-created?))
+    (sql/db-do-commands url "CREATE TYPE sex AS ENUM ('male', 'female', 'not applicable');"))
   (when (not (migrated?))
     (print "Creating database structure...") (flush)
-    (sql/db-do-commands url "CREATE TYPE sex AS ENUM ('male', 'female', 'not applicable');")
     (sql/db-do-commands url
                         (sql/create-table-ddl
                          db-name
@@ -50,3 +57,6 @@
                           [:birth :date "NOT NULL"]
                           [:address "varchar(255)" "NOT NULL"]]))
     (println " done")))
+
+(defn drop-table []
+  (sql/db-do-commands url (str "drop table " db-name)))
