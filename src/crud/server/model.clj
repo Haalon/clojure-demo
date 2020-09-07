@@ -3,7 +3,7 @@
             [crud.server.util :as util]))
 
 (def url "postgresql://localhost:5432/crud")
-(def db-name db-name) ; may be changed for testing?
+(def db-name :crud) ; may be changed for testing?
 
 (defn list []
   (sql/query url ["select * from crud order by id"]))
@@ -31,7 +31,9 @@
 (defn migrated? []
   (-> (sql/query url
                  [(str "select count(*) from information_schema.tables "
-                       "where table_name='crud'")])
+                       "where table_name='"
+                       (name db-name)
+                       "'")])
       first :count pos?))
 
 (defn migrate []
