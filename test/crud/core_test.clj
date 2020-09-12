@@ -6,7 +6,6 @@
             [crud.server.web :as web]
             [ring.mock.request :as mock]))
 
-
 (defn db-fixture [f]
   (with-redefs [model/db-name "test"]
     (model/migrate)
@@ -35,11 +34,10 @@
                   "address" "nowhere"})
 
 (def test-person2 {"name" "alice"
-                  "birth" "2000-01-01"
-                  "insurance" "0000000000000001"
-                  "sex" "female"
-                  "address" "somewhere"})
-
+                   "birth" "2000-01-01"
+                   "insurance" "0000000000000001"
+                   "sex" "female"
+                   "address" "somewhere"})
 
 (deftest success-test
   (let [res (respond-to :post "/api" test-person)]

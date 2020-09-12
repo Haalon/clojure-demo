@@ -7,7 +7,6 @@
 
 (reloaded.repl/set-init! #(core/create-system))
 
-
 (defn mock-insurance []
   (clojure.string/join (map str (take 16 (repeatedly #(rand-int 10))))))
 
@@ -25,8 +24,8 @@
 
 (defn populate [len]
   (sql/insert! model/url :crud {:name (mock-name),
-                          :insurance (mock-insurance),
-                          :sex (mock-sex)
-                          :birth (mock-birth)
-                          :address (mock-name)})
+                                :insurance (mock-insurance),
+                                :sex (mock-sex)
+                                :birth (mock-birth)
+                                :address (mock-name)})
   (if (> len 0) (populate (- len 1)) nil))

@@ -1,7 +1,6 @@
 (ns crud.client.table
   (:require-macros [cljs.core.async.macros :refer [go]])
-  (:require [reagent.core :as r]
-            [reagent.dom :as rdom]
+  (:require [cljs.core.async :refer [<!]]
             [crud.client.api :as api]
             [crud.client.state :as state]))
 

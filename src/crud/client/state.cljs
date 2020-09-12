@@ -1,7 +1,7 @@
 (ns crud.client.state
   (:require [reagent.core :as r]
             [crud.client.api :as api]
-            [cljs.core.async :refer [<! take!]]))
+            [cljs.core.async :refer [take!]]))
 
 (def data (r/atom nil))
 (def popup? (r/atom nil))
@@ -15,7 +15,7 @@
   (reset! popup? nil))
 
 (defn set-form [entry flag]
- (when @popup? ; reset the form inputs to default
-   (-> "form" js/document.getElementById .reset))
-	(reset! selected-entry entry)
-	(reset! popup? flag))
+  (when @popup? ; reset the form inputs to default
+    (-> "form" js/document.getElementById .reset))
+  (reset! selected-entry entry)
+  (reset! popup? flag))

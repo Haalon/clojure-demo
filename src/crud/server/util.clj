@@ -1,6 +1,5 @@
 (ns crud.server.util
-  (:import org.postgresql.util.PGobject)
-  (:require [clojure.java.jdbc :as sql]))
+  (:import org.postgresql.util.PGobject))
 
 (defn parse-sql-date [datestr]
   (->> (str datestr "-UTC") ; add "-UTC" so timezones won't matter

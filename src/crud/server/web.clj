@@ -3,7 +3,6 @@
             [compojure.core :refer [defroutes GET DELETE POST PUT]]
             [compojure.route :refer [resources]]
             [crud.server.model :as model]
-            [crud.server.util :as util]
             [clojure.data.json :as json]))
 
 (defn build-response [body status]

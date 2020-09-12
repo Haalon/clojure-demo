@@ -1,7 +1,7 @@
 (ns crud.client.api
   (:require-macros [cljs.core.async.macros :refer [go]])
   (:require [cljs-http.client :as http]
-            [cljs.core.async :refer [<! take!]]))
+            [cljs.core.async :refer [<!]]))
 
 (def url js/window.location.href)
 (def url-api (str url "api"))

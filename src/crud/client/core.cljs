@@ -1,12 +1,8 @@
 (ns crud.client.core
-  (:require-macros [cljs.core.async.macros :refer [go]])
-  (:require [reagent.core :as r]
-            [reagent.dom :as rdom]
+  (:require [reagent.dom :as rdom]
             [crud.client.state :as state]
-            [crud.client.api :as api]
             [crud.client.table :refer [table]]
-            [crud.client.form :refer [form]]
-            [cljs.core.async :refer [<! take!]]))
+            [crud.client.form :refer [form]]))
 
 (defn app []
   [:div.container

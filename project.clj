@@ -21,7 +21,7 @@
 					   :dev {:plugins [[lein-cljsbuild "1.1.8"]
 					                   [lein-cljfmt "0.6.8"]]
 					   	     :dependencies [[reloaded.repl "0.2.4"]
-                                  [ring/ring-mock "0.4.0"]]
+                             [ring/ring-mock "0.4.0"]]
 					   	     :source-paths ["dev"]
               :cljsbuild {:builds [{:source-paths ["src" "dev"]
                                     :figwheel true
