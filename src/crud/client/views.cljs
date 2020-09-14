@@ -1,26 +1,57 @@
-(ns crud.client.form
-  (:require-macros [cljs.core.async.macros :refer [go]])
-  (:require [cljs.core.async :refer [<!]]
-            [crud.client.api :as api]
-            [crud.client.state :as state]))
+(ns crud.client.views
+  (:require [re-frame.core :as rf]))
 
+(defn del-btn [id]
+  [:button
+   {:on-click #(rf/dispatch [:delete-data id])}
+   "X"])
+
+(defn edit-btn [entry]
+  [:button
+   {:on-click #(rf/dispatch [:show-form entry])}
+   "edit"])
+
+(defn refresh-btn []
+  [:button
+   {:on-click #(rf/dispatch [:fetch-data])}
+   "refresh"])
+
+(defn add-btn []
+  [:button
+   {:on-click #(rf/dispatch [:show-form nil])}
+   "add"])
+
+(defn line [mmap header?]
+  ^{:key (:id mmap)}
+  [:tr
+   (for [k (keys mmap)]
+     ^{:key (name k)}
+     [(if header? :th :td) (get mmap k)])
+   ^{:key "control"}
+   (if header?
+     [:th ""]
+     [:td
+      (del-btn (:id mmap))
+      (edit-btn mmap)])])
+
+(defn table-body [arrmap]
+  (when arrmap
+    (let [fields (->> arrmap first keys (map name))
+          fieldmap (zipmap fields fields)]
+      [:table
+       [:thead (line fieldmap true)]
+       [:tbody (for [m arrmap]  (line m false))]])))
+
+(defn table [arrmap]
+  [:div.container
+   [:div.row.container
+    (add-btn)
+    (refresh-btn)]
+   (table-body arrmap)])
+
+;; form elements
 (def sexes '("male" "female" "not applicable"))
 (def fields '("name" "insurance" "sex" "birth" "address"))
-
-(defn send-data [event]
-  (.preventDefault event) ;prevents page reload
-  (let [elems (-> event .-target .-elements) ;all form elements
-        values (map #(->> % (aget elems) .-value) fields)
-        valmap (zipmap fields values)
-        filtered (filter #(-> % second empty? not) valmap)
-        valmap (into {} filtered)
-        id (:id @state/selected-entry)]
-    (go
-      (<! (if id ; nil id --> this is a new entry
-            (api/update id valmap)
-            (api/add valmap)))
-      (state/fetch-data)
-      (state/reset-form))))
 
 (defn name-input [entry]
   [:div.row
@@ -66,8 +97,9 @@
                     :required (-> entry boolean not)}]])
 
 (defn form [entry]
-  (prn entry (-> entry boolean not))
-  [:form#form.floating.container {:on-submit send-data}
+  [:form#form.floating.container
+   {:on-submit (fn [e] (.preventDefault e)
+                 (rf/dispatch [:submit-form (.-target e)]))}
    (name-input entry)
    (insurance-input entry)
    (sex-input entry)
@@ -78,6 +110,17 @@
      {:type "submit"
       :value "submit"}]
     [:button
-     {:on-click state/reset-form
+     {:on-click #(rf/dispatch [:reset-form])
       :type "reset"}
      "cancel"]]])
+
+(defn app []
+  (let [data @(rf/subscribe [:data])
+        popup? @(rf/subscribe [:show-form])
+        entry @(rf/subscribe [:selected-entry])]
+    [:div.container
+     (if data
+       (table data)
+       [:h2 "Loading..."])
+     (when popup? (form entry))]))
+

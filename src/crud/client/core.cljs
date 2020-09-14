@@ -1,20 +1,18 @@
 (ns crud.client.core
-  (:require [reagent.dom :as rdom]
+  (:require [crud.client.events]
+            [crud.client.views]
+            [crud.client.form :refer [form]]
             [crud.client.state :as state]
             [crud.client.table :refer [table]]
-            [crud.client.form :refer [form]]))
-
-(defn app []
-  [:div.container
-   (if @state/data
-     (table @state/data)
-     [:h2 "Loading..."])
-   (when @state/popup? (form @state/selected-entry))])
+            [re-frame.core :as rf]
+            [reagent.dom :as rdom]))
 
 (defn ^:export main []
-  (state/fetch-data)
+  ; (state/fetch-data)
+  (rf/dispatch-sync [:init-db])
+  (rf/dispatch [:fetch-data])
   (rdom/render
-   [app]
+   [crud.client.views/app]
    (js/document.getElementById "app")))
 
 (main)

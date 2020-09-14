@@ -3,7 +3,7 @@
   (:require [cljs-http.client :as http]
             [cljs.core.async :refer [<!]]))
 
-(def url js/window.location.href)
+(def url js/window.location.href) ;js/window.location.href
 (def url-api (str url "api"))
 (defn url-api-item [id] (str url "api/" id))
 
