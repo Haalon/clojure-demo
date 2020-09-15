@@ -1,5 +1,6 @@
 (ns crud.client.views
-  (:require [re-frame.core :as rf]))
+  (:require [crud.client.db :as db]
+            [re-frame.core :as rf]))
 
 (defn del-btn [id]
   [:button
@@ -50,8 +51,6 @@
    (table-body arrmap)])
 
 ;; form elements
-(def sexes '("male" "female" "not applicable"))
-(def fields '("name" "insurance" "sex" "birth" "address"))
 
 (defn name-input [entry]
   [:div.row
@@ -77,7 +76,7 @@
    [:select#sex {:name "sex"
                  :required (-> entry boolean not)
                  :default-value (:sex entry "male")}
-    (for [sex sexes] [:option {:default-value sex
+    (for [sex db/sexes] [:option {:default-value sex
                                :key sex}
                       sex])]])
 

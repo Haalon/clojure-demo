@@ -1,6 +1,7 @@
 (ns crud.client.events
-  (:require [day8.re-frame.http-fx]
-            [ajax.core :refer [json-request-format json-response-format]]
+  (:require [ajax.core :refer [json-request-format json-response-format]]
+            [crud.client.db :as db]
+            [day8.re-frame.http-fx]
             [re-frame.core :as rf]))
 
 (def url js/window.location.href)
@@ -9,29 +10,7 @@
 
 (rf/reg-event-db
  :init-db
- (fn [_ _]
-   {:data {}
-    :show-form false
-    :selected-entry nil}))
-
-;; subscriptions
-
-(rf/reg-sub
- :data
- (fn [db _]
-   (:data db)))
-
-(rf/reg-sub
- :selected-entry
- (fn [db _]
-   (:selected-entry db)))
-
-(rf/reg-sub
- :show-form
- (fn [db _]
-   (:show-form db)))
-
-;; event handlers
+ (fn [_ _] db/db-default))
 
 (rf/reg-event-db
  :show-form
@@ -43,14 +22,12 @@
  (fn [db _]
    (assoc db :show-form false :selected-entry nil)))
 
-(def fields '("name" "insurance" "sex" "birth" "address"))
-
 (rf/reg-event-fx
  :submit-form
  (fn [{db :db} [_ event]]
    (let [elems (-> event .-elements) ;all form elements
-         values (map #(->> % (aget elems) .-value) fields)
-         valmap (zipmap fields values)
+         values (map #(->> % (aget elems) .-value) db/fields)
+         valmap (zipmap db/fields values)
          filtered (filter #(-> % second empty? not) valmap)
          valmap (into {} filtered)
          id (-> db :selected-entry :id)]

@@ -1,9 +1,7 @@
 (ns crud.client.core
   (:require [crud.client.events]
             [crud.client.views]
-            [crud.client.form :refer [form]]
-            [crud.client.state :as state]
-            [crud.client.table :refer [table]]
+            [crud.client.subs]
             [re-frame.core :as rf]
             [reagent.dom :as rdom]))
 
