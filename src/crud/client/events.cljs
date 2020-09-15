@@ -72,4 +72,9 @@
 (rf/reg-event-fx
  :request-failure
  (fn [_ [_ res]]
-   (js/alert res)))
+   {:alert (:response res)}))
+
+(rf/reg-fx
+ :alert
+ (fn [message]
+   (js/alert message)))

@@ -77,8 +77,8 @@
                  :required (-> entry boolean not)
                  :default-value (:sex entry "male")}
     (for [sex db/sexes] [:option {:default-value sex
-                               :key sex}
-                      sex])]])
+                                  :key sex}
+                         sex])]])
 
 (defn birth-input [entry]
   [:div.row

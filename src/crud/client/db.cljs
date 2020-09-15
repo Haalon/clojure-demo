@@ -4,6 +4,5 @@
                  :show-form false
                  :selected-entry nil})
 
-
 (def sexes '("male" "female" "not applicable"))
 (def fields '("name" "insurance" "sex" "birth" "address"))

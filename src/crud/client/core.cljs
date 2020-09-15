@@ -6,7 +6,6 @@
             [reagent.dom :as rdom]))
 
 (defn ^:export main []
-  ; (state/fetch-data)
   (rf/dispatch-sync [:init-db])
   (rf/dispatch [:fetch-data])
   (rdom/render
