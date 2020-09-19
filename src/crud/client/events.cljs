@@ -24,8 +24,8 @@
 
 (rf/reg-event-fx
  :submit-form
- (fn [{db :db} [_ event]]
-   (let [elems (-> event .-elements) ;all form elements
+ (fn [{db :db} [_ form]]
+   (let [elems (-> form .-elements) ;all form elements
          values (map #(->> % (aget elems) .-value) db/fields)
          valmap (zipmap db/fields values)
          filtered (filter #(-> % second empty? not) valmap)
