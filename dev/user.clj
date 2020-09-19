@@ -1,11 +1,12 @@
 (ns user
-  (:require [reloaded.repl :refer [system reset stop start]]
+  (:require ;;[reloaded.repl :refer [system reset stop start]]
             [crud.server.core :as core]
             [crud.server.util :as util]
             [crud.server.model :as model]
-            [clojure.java.jdbc :as sql]))
+            [clojure.java.jdbc :as sql]
+            [figwheel.main.api :as repl]))
 
-(reloaded.repl/set-init! #(core/create-system))
+;; (reloaded.repl/set-init! #(core/create-system))
 
 (defn mock-insurance []
   (clojure.string/join (map str (take 16 (repeatedly #(rand-int 10))))))
@@ -29,3 +30,40 @@
                                 :birth (mock-birth)
                                 :address (mock-name)})
   (if (> len 0) (populate (- len 1)) nil))
+
+(def figwheel-options
+  {:id "app"
+   :options {:main 'crud.client.core
+             :closure-defines {"re_frame.trace.trace_enabled_QMARK_" true}
+             :output-to "resources/public/cljs-out/dev-main.js"
+             :output-dir "resources/public/cljs-out/dev"}
+   :config {:watch-dirs ["src"]
+            :mode :serve
+            :ring-server-options {:port 8000}}})
+
+
+(defn run-ui [opts]
+  (repl/start  opts))
+
+(defn run-back
+ [& params]
+  (core/-main))
+
+(defn start []
+  ;; (run-back)
+  (run-ui figwheel-options))
+
+(defn stop []
+  (repl/stop "app")
+  (println "\nUI stopped"))
+
+#_(defonce state
+  (future (start)))
+
+(comment
+  (start)
+  (stop)
+
+  ;;(require '[figwheel.main.api :as repl])
+  (repl/cljs-repl "app")
+)
